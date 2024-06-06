@@ -8,7 +8,6 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Resource;
-use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -17,6 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\RoleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RoleResource\RelationManagers;
+use Filament\Forms\Components\Select;
+use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {
@@ -40,9 +41,17 @@ class RoleResource extends Resource
                     ->schema([
                         TextInput::make('name')
                             ->required()
-                            ->unique()
-                            ->label('Role Name'),
+                            ->unique(ignoreRecord: true)
+                            ->label('Role Name')
+                            ->placeholder('Role Name'),
+                        Select::make('permissions')
+                            ->multiple()
+                            ->label('Permissions')
+                            ->relationship(name: 'permissions', titleAttribute: 'name')
+                            ->searchable()
+                            ->preload()
                     ])
+                    ->columns(2)
             ]);
     }
 
@@ -60,6 +69,10 @@ class RoleResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->formatStateUsing(fn (string $state) => Str::title($state)),
+                TextColumn::make('permissions_count')
+                    ->badge()
+                    ->color('primary')
+                    ->counts('permissions')
             ])
             ->filters([
                 //
