@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources\RoleResource\Pages;
 
-use App\Filament\Resources\RoleResource;
 use Filament\Actions;
+use App\Filament\Resources\RoleResource;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateRole extends CreateRecord
@@ -13,5 +14,13 @@ class CreateRole extends CreateRecord
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
+    }
+
+    protected function getCreatedNotification(): ?Notification
+    {
+        return Notification::make()
+            ->success()
+            ->title('Role Created')
+            ->body('The Role Created Successfully');
     }
 }
