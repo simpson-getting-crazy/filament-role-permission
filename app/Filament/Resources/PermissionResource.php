@@ -8,18 +8,18 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Resource;
-use Spatie\Permission\Models\Role;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\RoleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\RoleResource\RelationManagers;
-use Filament\Forms\Components\Section;
+use App\Filament\Resources\PermissionResource\Pages;
+use App\Filament\Resources\PermissionResource\RelationManagers;
 
-class RoleResource extends Resource
+class PermissionResource extends Resource
 {
-    protected static ?string $model = Role::class;
+    protected static ?string $model = Permission::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -32,7 +32,7 @@ class RoleResource extends Resource
                         TextInput::make('name')
                             ->required()
                             ->unique()
-                            ->label('Role Name'),
+                            ->label('Permission Name'),
                     ])
             ]);
     }
@@ -42,7 +42,7 @@ class RoleResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Role Name')
+                    ->label('Permission Name')
                     ->searchable()
                     ->sortable()
                     ->formatStateUsing(fn (string $state) => Str::title($state)),
@@ -77,10 +77,10 @@ class RoleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListRoles::route('/'),
-            'create' => Pages\CreateRole::route('/create'),
-            'view' => Pages\ViewRole::route('/{record}'),
-            'edit' => Pages\EditRole::route('/{record}/edit'),
+            'index' => Pages\ListPermissions::route('/'),
+            'create' => Pages\CreatePermission::route('/create'),
+            'view' => Pages\ViewPermission::route('/{record}'),
+            'edit' => Pages\EditPermission::route('/{record}/edit'),
         ];
     }
 }
