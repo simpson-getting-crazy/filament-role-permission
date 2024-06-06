@@ -16,6 +16,7 @@ use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 
@@ -41,13 +42,22 @@ class UserResource extends Resource
                     ->schema([
                         TextInput::make('name')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->label('User Name')
+                            ->placeholder('User Name'),
                         TextInput::make('email')
                             ->email()
                             ->required()
                             ->maxLength(255)
-                            ->unique(ignoreRecord: true),
-                        DateTimePicker::make('email_verified_at'),
+                            ->unique(ignoreRecord: true)
+                            ->label('User Email')
+                            ->placeholder('User Email'),
+                        Select::make('roles')
+                            ->required()
+                            ->relationship(name: 'roles', titleAttribute: 'name')
+                            ->label('Roles')
+                            ->searchable()
+                            ->preload(),
                         TextInput::make('password')
                             ->password()
                             ->minLength(8)
